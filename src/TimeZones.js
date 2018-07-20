@@ -1,7 +1,7 @@
 const Enum = require('enum');
 
 /*
- * An enum of time zones, by UTC offset, ignoring Daylight Savings.
+ * An enum of time zones, by UTC offset, ignoring Daylight Savings Time.
  */
 module.exports = new Enum({
   'UTC-1200': [-12,  00],
