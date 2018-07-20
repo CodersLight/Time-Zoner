@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/CodersLight/Time-Zoner#readme",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js"
+    "discord.js": "github:discordjs/discord.js",
+    "enum": "^2.5.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1"
