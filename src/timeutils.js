@@ -32,6 +32,7 @@ const zones = new Enum({
 	'UTC-0200': [-02,  00],
 	'UTC-0100': [-01,  00],
 	'UTC-0000': [ 00,  00],
+	'GMT':      [ 00,  00],
 	'UTC+0000': [ 00,  00],
 	'WET':      [ 00,  00],
 	'UTC+0100': [ 01,  00],
@@ -127,3 +128,48 @@ const getTimeZoneFromName = (str) => {
 	}
 };
 module.exports.getTimeZoneFromName = getTimeZoneFromName;
+
+const getFebLength = (_) => {
+	const year = _.getFullYear();
+	if(year % 4 === 0 && !(year % 400 === 0)) return 29;
+	return 28;
+}
+const getTimeIn = (timezone) => {
+	const zone = getTimeZoneFromName(timezone);
+	if(zone === null) return null;
+	const [hOffset, mOffset] = zone.value;
+
+	const _ = new Date();
+	const _hours = _.getUTCHours();
+	const _minutes = _.getUTCMinutes();
+
+	let year = _.getFullYear();
+	let month = _.getMonth();
+	let date = _.getUTCDate();
+	let hours = _hours + hOffset;
+	let minutes = _minutes + mOffset;
+
+	const monthLengths = [31, getFebLength(_), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+	if(minutes >= 60) {
+		minutes = minutes - 60;
+		hours += 1;
+	}
+	if(hours >= 24) {
+		hours = hours - 24;
+		date += 1;
+	}
+	if(date > monthLengths[month]) {
+		date = 1;
+		month += 1;
+	}
+	if(month + 1 > 12) {
+		month = 1;
+		year += 1;
+	}
+
+	month += 1;
+
+	return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}, ${date.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+};
+module.exports.getTimeIn = getTimeIn;
