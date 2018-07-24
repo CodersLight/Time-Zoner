@@ -1,6 +1,7 @@
 /* eslint no-octal: 0 */
 
 const Enum = require('enum');
+const moment = require('moment');
 
 /*
  * An enum of time zones, by UTC offset, ignoring Daylight Savings Time.
@@ -133,11 +134,23 @@ const getFebLength = (_) => {
 	const year = _.getFullYear();
 	if(year % 4 === 0 && !(year % 400 === 0)) return 29;
 	return 28;
-}
+};
+const padH = (h) => {
+	if(h >= 0) {
+		return h.toString().padStart(2, '0');
+	} else {
+		if(h.toString().length > 2) return h.toString();
+		return `-0${h}`;
+	}
+};
+const isDST = (_) => {
+	return moment().utcOffset(`${padH(_[0])}:${_[1].toString().padStart(2, '0')}`).isDST();
+};
 const getTimeIn = (timezone) => {
 	const zone = getTimeZoneFromName(timezone);
 	if(zone === null) return null;
 	const [hOffset, mOffset] = zone.value;
+	const dstOffset = isDST(zone.value) ? 1 : 0;
 
 	const _ = new Date();
 	const _hours = _.getUTCHours();
@@ -146,7 +159,7 @@ const getTimeIn = (timezone) => {
 	let year = _.getFullYear();
 	let month = _.getMonth();
 	let date = _.getUTCDate();
-	let hours = _hours + hOffset;
+	let hours = _hours + hOffset + dstOffset;
 	let minutes = _minutes + mOffset;
 
 	const monthLengths = [31, getFebLength(_), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -173,3 +186,5 @@ const getTimeIn = (timezone) => {
 	return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}, ${date.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
 };
 module.exports.getTimeIn = getTimeIn;
+
+console.log(getTimeIn('EST'));
