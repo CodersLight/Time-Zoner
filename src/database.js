@@ -62,4 +62,5 @@ class KeyValueDatabase {
 	}
 }
 
-module.exports = new KeyValueDatabase('userzones');
+module.exports.ZONES = new KeyValueDatabase('userzones');
+module.exports.PREFERENCES = new KeyValueDatabase('userpreferences');

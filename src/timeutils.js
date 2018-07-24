@@ -2,6 +2,7 @@
 
 const Enum = require('enum');
 const moment = require('moment');
+const db = require('./database.js').PREFERENCES;
 
 /*
  * An enum of time zones, by UTC offset, ignoring Daylight Savings Time.
@@ -121,14 +122,11 @@ const getTimeZoneFromName = (str) => {
 			res += offset;
 		}
 
-		console.log(res);
-
 		return zones[res] ? zones[res] : null;
 	} else {
 		return null;
 	}
 };
-module.exports.getTimeZoneFromName = getTimeZoneFromName;
 
 const getFebLength = (_) => {
 	const year = _.getFullYear();
@@ -140,13 +138,13 @@ const padH = (h) => {
 		return h.toString().padStart(2, '0');
 	} else {
 		if(h.toString().length > 2) return h.toString();
-		return `-0${h}`;
+		return `-0${h.toString().substring(1)}`;
 	}
 };
 const isDST = (_) => {
 	return moment().utcOffset(`${padH(_[0])}:${_[1].toString().padStart(2, '0')}`).isDST();
 };
-const getTimeIn = (timezone) => {
+const getISOTimeIn = (timezone) => {
 	const zone = getTimeZoneFromName(timezone);
 	if(zone === null) return null;
 	const [hOffset, mOffset] = zone.value;
@@ -183,8 +181,42 @@ const getTimeIn = (timezone) => {
 
 	month += 1;
 
-	return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}, ${date.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+	return `${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00${padH(hOffset)}:${mOffset.toString().padStart(2, '0')}`;
+};
+
+const timeStyles = {
+	'12-hour': 'h:mm A',
+	'am-pm':   'h:mm A',
+	'24-hour': 'HH:mm'
+};
+const dateStyles = {
+	'month-first':       'MM/DD/YYYY',
+	'short-month-first': 'M/D/YY',
+	'date-first':        'DD/MM/YYYY',
+	'short-date-first':  'D/M/YY'
+};
+
+const getFormat = (prefs) => {
+	return {
+		timeStyle: timeStyles[prefs.timeStyle],
+		dateStyle : dateStyles[prefs.dateStyle]
+	};
+};
+const getFormatFor = (userID) => {
+	if(db.has(userID)) {
+		return `${db.get(userID).timeStyle}, ${db.get(userID).dateStyle}`;
+	} else {
+		db.set(userID, getFormat(require('./config.json').defaultPreferences));
+
+		return `${db.get(userID).timeStyle}, ${db.get(userID).dateStyle}`;
+	}
+};
+module.exports.getFormatFor = getFormatFor;
+
+const getTimeIn = (timezone, format) => {
+	const ISO = getISOTimeIn(timezone);
+	if(ISO === null) return null;
+
+	return moment(ISO).format(format);
 };
 module.exports.getTimeIn = getTimeIn;
-
-console.log(getTimeIn('EST'));

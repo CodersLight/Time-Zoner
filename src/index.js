@@ -12,7 +12,6 @@ fs.readdir('./commands', (err, files) => {
 });
 
 client.on('ready', () => {
-	// eslint-disable-next-line no-console
 	console.log('Connected to Discord!');
 });
 
