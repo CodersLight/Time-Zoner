@@ -127,6 +127,7 @@ const getTimeZoneFromName = (str) => {
 		return null;
 	}
 };
+module.exports.getTimeZoneFromName = getTimeZoneFromName;
 
 const getFebLength = (_) => {
 	const year = _.getFullYear();
