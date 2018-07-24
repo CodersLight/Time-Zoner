@@ -155,7 +155,7 @@ const isDST = (_) => {
 };
 const getISOTimeIn = (timezone) => {
 	const zone = getTimeZoneFromName(timezone);
-	if(zone === null) return null;
+	if(zone === null) return [null, null];
 	const [hOffset, mOffset] = zone.value;
 	const dstOffset = isDST(zone.value) ? 1 : 0;
 
