@@ -44,6 +44,15 @@ module.exports.timezoneGetEmbed = (id, guild, zone) => {
 	return embed;
 };
 
+module.exports.timeGetEmbed = (id, guild, time) => {
+	const embed = new Discord.MessageEmbed()
+		.setColor(3381759)
+		.addField('Success!', `It is \`${time}\` for \`${displayFromID(id, guild)}\`.`)
+		.setFooter('Made by SkyHawk#1058');
+
+	return embed;
+};
+
 module.exports.timezoneNotYetSetEmbed = (id, guild) => {
 	const embed = new Discord.MessageEmbed()
 		.setColor(3381759)

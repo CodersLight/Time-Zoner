@@ -136,6 +136,14 @@ const getFebLength = (_) => {
 };
 const padH = (h) => {
 	if(h >= 0) {
+		return '+' + h.toString().padStart(2, '0');
+	} else {
+		if(h.toString().length > 2) return h.toString();
+		return `-0${h.toString().substring(1)}`;
+	}
+};
+const padH_ = (h) => {
+	if(h >= 0) {
 		return h.toString().padStart(2, '0');
 	} else {
 		if(h.toString().length > 2) return h.toString();
@@ -143,7 +151,7 @@ const padH = (h) => {
 	}
 };
 const isDST = (_) => {
-	return moment().utcOffset(`${padH(_[0])}:${_[1].toString().padStart(2, '0')}`).isDST();
+	return moment().utcOffset(`${padH_(_[0])}:${_[1].toString().padStart(2, '0')}`).isDST();
 };
 const getISOTimeIn = (timezone) => {
 	const zone = getTimeZoneFromName(timezone);
@@ -182,7 +190,10 @@ const getISOTimeIn = (timezone) => {
 
 	month += 1;
 
-	return `${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00${padH(hOffset)}:${mOffset.toString().padStart(2, '0')}`;
+	return [
+		`${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00Z`,
+		hOffset < 0
+	];
 };
 
 const timeStyles = {
@@ -215,9 +226,9 @@ const getFormatFor = (userID) => {
 module.exports.getFormatFor = getFormatFor;
 
 const getTimeIn = (timezone, format) => {
-	const ISO = getISOTimeIn(timezone);
+	const [ISO, behind] = getISOTimeIn(timezone);
 	if(ISO === null) return null;
 
-	return moment(ISO).format(format);
+	return moment(ISO).utcOffset(behind ? 1 : 0).format(format);
 };
 module.exports.getTimeIn = getTimeIn;
