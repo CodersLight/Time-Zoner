@@ -179,6 +179,8 @@ const getISOTimeIn = (timezone) => {
 	if(hours >= 24) {
 		hours = hours - 24;
 		date += 1;
+	} else if(hours < 0) {
+		hours = 24 + hours;
 	}
 	if(date > monthLengths[month]) {
 		date = 1;
@@ -191,8 +193,9 @@ const getISOTimeIn = (timezone) => {
 
 	month += 1;
 
+console.log(hours);
 	return [
-		`${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00Z`,
+		`${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${padH_(hours)}:${minutes.toString().padStart(2, '0')}:00Z`,
 		hOffset < 0
 	];
 };
