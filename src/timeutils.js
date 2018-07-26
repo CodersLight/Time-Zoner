@@ -3,6 +3,7 @@
 const Enum = require('enum');
 const moment = require('moment');
 const db = require('./database.js').PREFERENCES;
+const config = require('./config.json');
 
 /*
  * An enum of time zones, by UTC offset, ignoring Daylight Savings Time.
@@ -193,7 +194,6 @@ const getISOTimeIn = (timezone) => {
 
 	month += 1;
 
-console.log(hours);
 	return [
 		`${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${padH_(hours)}:${minutes.toString().padStart(2, '0')}:00Z`,
 		hOffset < 0
@@ -205,12 +205,16 @@ const timeStyles = {
 	'am-pm':   'h:mm A',
 	'24-hour': 'HH:mm'
 };
+module.exports.timeStyles = timeStyles;
+module.exports.validTimeStyles = '`12-hour`, `am-pm`, `24-hour`';
 const dateStyles = {
 	'month-first':       'MM/DD/YYYY',
 	'short-month-first': 'M/D/YY',
 	'date-first':        'DD/MM/YYYY',
 	'short-date-first':  'D/M/YY'
 };
+module.exports.dateStyles = dateStyles;
+module.exports.validDateStyles = '`month-first`, `short-month-first`, `date-first`, `short-date-first`';
 
 const getFormat = (prefs) => {
 	return {
@@ -222,12 +226,21 @@ const getFormatFor = (userID) => {
 	if(db.has(userID)) {
 		return `${db.get(userID).timeStyle}, ${db.get(userID).dateStyle}`;
 	} else {
-		db.set(userID, getFormat(require('./config.json').defaultPreferences));
+		db.set(userID, getFormat(config.defaultPreferences));
 
 		return `${db.get(userID).timeStyle}, ${db.get(userID).dateStyle}`;
 	}
 };
 module.exports.getFormatFor = getFormatFor;
+
+const isValidDateFormat = (format) => {
+	return dateStyles.hasOwnProperty(format);
+};
+module.exports.isValidDateFormat = isValidDateFormat;
+const isValidTimeFormat = (format) => {
+	return timeStyles.hasOwnProperty(format);
+};
+module.exports.isValidTimeFormat = isValidTimeFormat;
 
 const getTimeIn = (timezone, format) => {
 	const [ISO, behind] = getISOTimeIn(timezone);
