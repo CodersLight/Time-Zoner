@@ -22,7 +22,6 @@ class KeyValueDatabase {
 	}
 
 	set(key, value) {
-		console.log('Q');
 		this.data[key] = value;
 
 		this.sync();

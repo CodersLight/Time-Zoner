@@ -9,11 +9,8 @@ module.exports.run = (client, message, config) => {
   let current = db.has(id) ? db.get(id) : config.defaultPreferences;
 
   if(timeutils.isValidTimeFormat(style)) {
-    console.log('L#12');
     current.timeStyle = timeutils.timeStyles[style];
-    console.log(`L#14`);
-    db.set(userID, current);
-    console.log('L#16');
+    db.set(id, current);
 
     message.channel.send(embedutils.styleSetSuccess('time', style));
   } else {

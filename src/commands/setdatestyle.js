@@ -10,7 +10,7 @@ module.exports.run = (client, message, config) => {
 
   if(timeutils.isValidDateFormat(style)) {
     current.dateStyle = timeutils.dateStyles[style];
-    db.set(userID, current);
+    db.set(id, current);
 
     message.channel.send(embedutils.styleSetSuccess('date', style));
   } else {

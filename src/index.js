@@ -27,8 +27,12 @@ client.on('message', (message) => {
 			const commandFile = require(`./commands/${command}.js`);
 
 			commandFile.run(client, message, config);
-		} catch(err) {} // eslint-disable-line no-empty
+		} catch(err) {
+			console.error(err);
+		}
 	}
 });
+
+client.on('error', console.error);
 
 client.login(require('./auth.js').TOKEN);
