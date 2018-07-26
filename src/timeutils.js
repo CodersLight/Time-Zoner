@@ -96,6 +96,7 @@ const zones = new Enum({
 	'UTC+1300': [ 13,  00],
 	'UTC+1400': [ 14,  00]
 });
+module.exports.zones = zones;
 
 const getTimeZoneFromName = (str) => {
 	str = str.toUpperCase().replace(':', '');

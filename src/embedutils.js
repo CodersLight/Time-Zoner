@@ -61,3 +61,21 @@ module.exports.timezoneNotYetSetEmbed = (id, guild) => {
 
 	return embed;
 };
+
+module.exports.zoneMessageSuccessEmbed = () => {
+	const embed = new Discord.MessageEmbed()
+		.setColor(3381759)
+		.addField(`Success!`, `A list of valid time zones has been sent to your DMs.`)
+		.setFooter('Made by SkyHawk#1058');
+
+	return embed;
+};
+
+module.exports.zoneMessageFailEmbed = () => {
+	const embed = new Discord.MessageEmbed()
+		.setColor(3381759)
+		.addField(`ERROR`, `An error occurred while processsing this command.`)
+		.setFooter('Made by SkyHawk#1058');
+
+	return embed;
+};
