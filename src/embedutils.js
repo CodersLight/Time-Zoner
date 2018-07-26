@@ -79,3 +79,22 @@ module.exports.zoneMessageFailEmbed = () => {
 
 	return embed;
 };
+
+module.exports.styleSetSuccess = (which, _) => {
+	const embed = new Discord.MessageEmbed()
+		.setColor(3381759)
+		.addField(`Success!`, `Your ${which} style is now \`${_}\`!`)
+		.setFooter('Made by SkyHawk#1058');
+
+	return embed;
+};
+
+module.exports.styleSetError = (which, _, valid) => {
+	const embed = new Discord.MessageEmbed()
+		.setColor(3381759)
+		.addField(`ERROR`, `\`${_}\` is not a valid ${which} style!`)
+		.addField(`Valid ${which[1].toUpperCase() + which.substring(1)} Styles`, valid)
+		.setFooter('Made by SkyHawk#1058');
+
+	return embed;
+};
