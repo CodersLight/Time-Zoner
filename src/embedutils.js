@@ -14,7 +14,7 @@ module.exports.timeSuccessEmbed = (zone, time) => {
 	const embed = new Discord.MessageEmbed()
 		.setColor(3381759)
 		.addField(`Current \`${zone.toUpperCase()}\` Time`, `${time}`)
-		.setFooter('Made by SkyHawk#1058');
+		.setFooter('Made by SkyHawk#1058 | CodersLight');
 
 	return embed;
 };
