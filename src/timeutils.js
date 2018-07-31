@@ -195,8 +195,8 @@ const getISOTimeIn = (timezone) => {
 	month += 1;
 
 	return [
-		`${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${padH_(hours)}:${minutes.toString().padStart(2, '0')}:00Z`,
-		hOffset < 0
+    `${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}T${padH_(hours)}:${minutes.toString().padStart(2, '0')}:00Z`,
+    hOffset <= 0
 	];
 };
 
