@@ -17,6 +17,7 @@ client.on('ready', () => {
 
 client.on('message', (message) => {
 	if(message.author.bot || message.content.indexOf(config.prefix) !== 0) return;
+  if(!message.guild) return message.channel.send('No commands in DMs!');
 
 	const command = message.content.slice(config.prefix.length).trim().split(/ +/g).shift().toLowerCase();
 
